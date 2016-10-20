@@ -1,0 +1,465 @@
+﻿<Application x:Class="Project_Stereometry.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Project_Stereometry"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        
+        <Style TargetType="Canvas" x:Key="MainCanvas">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <local:BackgroundToGradientColorConverter x:Key="gradientConverter"/>
+        <!--<Style x:Key="ExpanderRightHeaderStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Padding="{TemplateBinding Padding}">
+                            <Grid Background="Transparent" SnapsToDevicePixels="False">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="19"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.LayoutTransform>
+                                        <TransformGroup>
+                                            <TransformGroup.Children>
+                                                <TransformCollection>
+                                                    <RotateTransform Angle="-90"/>
+                                                </TransformCollection>
+                                            </TransformGroup.Children>
+                                        </TransformGroup>
+                                    </Grid.LayoutTransform>
+                                    <Ellipse x:Name="circle" Fill="{StaticResource Expander.Static.Circle.Fill}" HorizontalAlignment="Center" Height="19" Stroke="{StaticResource Expander.Static.Circle.Stroke}" VerticalAlignment="Center" Width="19"/>
+                                    <Path x:Name="arrow" Data="M 1,1.5 L 4.5,5 L 8,1.5" HorizontalAlignment="Center" SnapsToDevicePixels="false" Stroke="{StaticResource Expander.Static.Arrow.Stroke}" StrokeThickness="2" VerticalAlignment="Center"/>
+                                </Grid>
+                                <ContentPresenter HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="1" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Top"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Data" TargetName="arrow" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Stroke" TargetName="circle" Value="{StaticResource Expander.MouseOver.Circle.Stroke}"/>
+                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource Expander.MouseOver.Circle.Fill}"/>
+                                <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource Expander.MouseOver.Arrow.Stroke}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Stroke" TargetName="circle" Value="{StaticResource Expander.Pressed.Circle.Stroke}"/>
+                                <Setter Property="StrokeThickness" TargetName="circle" Value="1.5"/>
+                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource Expander.Pressed.Circle.Fill}"/>
+                                <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource Expander.Pressed.Arrow.Stroke}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Stroke" TargetName="circle" Value="{StaticResource Expander.Disabled.Circle.Stroke}"/>
+                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource Expander.Disabled.Circle.Fill}"/>
+                                <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource Expander.Disabled.Arrow.Stroke}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+        <Style x:Key="ExpanderHeaderFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border>
+                            <Rectangle Margin="0" SnapsToDevicePixels="true" Stroke="Black" StrokeThickness="1" StrokeDashArray="1 2"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border>
+                            <Grid Background="Transparent" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" x:Name="elipseGrid" RenderTransformOrigin="0.5, 0.5">
+                                <Ellipse x:Name="gradientElipse" Fill="{TemplateBinding Background, Converter={StaticResource gradientConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect Opacity="0.45" BlurRadius="2" ShadowDepth="3" Direction="300"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="2,2,0,0">
+                                    <ContentPresenter.RenderTransform>
+                                        <ScaleTransform ScaleX="0.82" ScaleY="0.82"/>
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+                                <Image x:Name="clicked" Source="Custom_Toggle/BB_Highlighter1.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <ScaleTransform ScaleX="0.88" ScaleY="0.88"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                                <Image x:Name="highlight" Source="Custom_Toggle/BB_Highlighter.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                <Image x:Name="pressed" Source="Custom_Toggle/BB_Pressed.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                <Image x:Name="disabled" Source="Custom_Toggle/BB_Disabled_Overlay.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Opacity" Value="0.85" TargetName="clicked"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Opacity" Value="0.75" TargetName="highlight"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Opacity" Value="1" TargetName="pressed"/>
+                                <Setter Property="Opacity" Value="0.2" TargetName="highlight"/>
+                                <Setter Property="RenderTransform" TargetName="elipseGrid">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" Value="1" TargetName="disabled"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="BB_Menu_Expander" TargetType="{x:Type Expander}">
+            <Setter Property="local:BB_Expander.Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <!--<Setter Property="Width" Value="75"/>
+            <Setter Property="Header" Value="75"/>-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Expander}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                            <StackPanel Orientation="Vertical" x:Name="Stack">
+                                <ToggleButton x:Name="HeaderSite" Content="{TemplateBinding Header}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" MinWidth="0" MinHeight="0" Width="65" Height="65" Style="{StaticResource ExpanderDownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" Background="{TemplateBinding Background}"/>
+                                <ContentPresenter x:Name="ExpandSite" Focusable="false" HorizontalAlignment="Left" Margin="{TemplateBinding Padding}" Visibility="Collapsed" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="true">
+                                <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="ExpandDirection" Value="Right">
+                                <Setter Property="Style" TargetName="Stack">
+                                    <Setter.Value>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Orientation" Value="Horizontal"/>
+                                        </Style>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="HorizontalAlignment" TargetName="ExpandSite" Value="Left"/>
+                                <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderRightHeaderStyle}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style x:Key="BB_ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border HorizontalAlignment="Left">
+                            <Grid Background="Transparent" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" x:Name="elipseGrid" RenderTransformOrigin="0.5, 0.5" HorizontalAlignment="Left">
+                                <Ellipse x:Name="gradientElipse" Fill="{TemplateBinding Background, Converter={StaticResource gradientConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect Opacity="0.45" BlurRadius="2" ShadowDepth="3" Direction="300"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="2,2,0,0">
+                                    <ContentPresenter.RenderTransform>
+                                        <ScaleTransform ScaleX="0.82" ScaleY="0.82"/>
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+                                <Image x:Name="clicked" Source="Custom_Toggle/BB_Highlighter1.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <ScaleTransform ScaleX="0.88" ScaleY="0.88"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                                <Image x:Name="highlight" Source="Custom_Toggle/BB_Highlighter.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                <Image x:Name="pressed" Source="Custom_Toggle/BB_Pressed.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                <Image x:Name="disabled" Source="Custom_Toggle/BB_Disabled_Overlay.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Opacity" Value="0.85" TargetName="clicked"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Opacity" Value="0.75" TargetName="highlight"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Opacity" Value="1" TargetName="pressed"/>
+                                <Setter Property="Opacity" Value="0.2" TargetName="highlight"/>
+                                <Setter Property="RenderTransform" TargetName="elipseGrid">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" Value="1" TargetName="disabled"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="BB_Menu_Expander_Prime" TargetType="{x:Type local:BB_Expander}">
+            <Setter Property="local:BB_Expander.Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="ElipseRadius" Value="65"/>
+            <!--<Setter Property="Width" Value="75"/>
+            <Setter Property="Header" Value="75"/>-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:BB_Expander}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                            <DockPanel>
+                                <ToggleButton x:Name="HeaderSite" Content="{TemplateBinding Header}" DockPanel.Dock="Top" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" MinWidth="0" MinHeight="0" Width="{TemplateBinding ElipseRadius}" Height="{TemplateBinding ElipseRadius}" Style="{StaticResource BB_ExpanderDownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" Background="{TemplateBinding Background}" ToolTipService.InitialShowDelay="1100" HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
+                                    <ToggleButton.ToolTip>
+                                        <DockPanel>
+                                            <Border BorderBrush="Beige" BorderThickness="0,0,0,1" DockPanel.Dock="Top" Margin="0,0,0,0">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Height="21" Width="21" Source="{TemplateBinding TooltipIconSource}" VerticalAlignment="Center"/>
+                                                    <TextBlock FontSize="13" FontWeight="Bold" DockPanel.Dock="Top" Height="21" Text="{TemplateBinding BB_TooltipTitle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
+                                            <TextBlock FontSize="11" Margin="1,3,1,0" Text="{TemplateBinding BB_TooltipContent}" Width="115" TextWrapping="WrapWithOverflow" TextAlignment="Right"/>
+                                        </DockPanel>
+                                    </ToggleButton.ToolTip>
+                                </ToggleButton>
+                                <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Focusable="false" HorizontalAlignment="Left" Margin="{TemplateBinding Padding}" Visibility="Collapsed" VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="true">
+                                <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="ExpandDirection" Value="Right">
+                                <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Right"/>
+                                <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Left"/>
+                                <!--<Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderRightHeaderStyle}"/>-->
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SmallRemoteToggleStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource ExpanderHeaderFocusVisual}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border>
+                            <Grid Background="Transparent" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" x:Name="elipseGrid" RenderTransformOrigin="0.5, 0.5">
+                                <Ellipse x:Name="gradientElipse" Fill="{TemplateBinding Background, Converter={StaticResource gradientConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect Opacity="0.45" BlurRadius="2" ShadowDepth="3" Direction="300"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="2,2,0,0" Opacity="0.92">
+                                    <ContentPresenter.RenderTransform>
+                                        <ScaleTransform ScaleX="0.62" ScaleY="0.62"/>
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+                                <Image x:Name="clicked" Source="Custom_Toggle/BB_Highlighter1.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <ScaleTransform ScaleX="0.88" ScaleY="0.88"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                                <Image x:Name="highlight" Source="Custom_Toggle/BB_Highlighter.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                <Image x:Name="pressed" Source="Custom_Toggle/BB_Pressed.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                <Image x:Name="disabled" Source="Custom_Toggle/BB_Disabled_Overlay.png" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Opacity" Value="0.85" TargetName="clicked"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Opacity" Value="0.75" TargetName="highlight"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Opacity" Value="1" TargetName="pressed"/>
+                                <Setter Property="Opacity" Value="0.2" TargetName="highlight"/>
+                                <Setter Property="RenderTransform" TargetName="elipseGrid">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" Value="1" TargetName="disabled"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--Menu button-->
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#204475"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#f6f6f4"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        
+        <Style x:Key="MenuButton" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="#192e70"/>
+            <Setter Property="Foreground" Value="#f6f6f4"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="buttonGrid" RenderTransformOrigin="0.5,0.5">
+                            <Rectangle Fill="Black">
+                                <Rectangle.Effect>
+                                    <DropShadowEffect Opacity="0.45" BlurRadius="2" ShadowDepth="3" Direction="300"/>
+                                </Rectangle.Effect>
+                            </Rectangle>
+                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                            <Rectangle x:Name="highlight"  Fill="#6f9dd8" Stroke="#b2e7f8" StrokeThickness="2" Opacity="0.2" Visibility="Collapsed"></Rectangle>
+                            <Rectangle x:Name="disabled" Fill="#8A8A8A" Opacity="0"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Visibility" TargetName="highlight" Value="Visible"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Opacity" TargetName="highlight" Value="0.4"/>
+                                <Setter Property="RenderTransform" TargetName="buttonGrid">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="disabled" Property="Opacity" Value="0.3"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="RadioButton.Static.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="RadioButton.Static.Border" Color="#FF707070"/>
+        <Style x:Key="OptionMarkFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Instrument RadioButton-->
+        
+        <SolidColorBrush x:Key="RadioButton.MouseOver.Background" Color="#FFF3F9FF"/>
+        <SolidColorBrush x:Key="RadioButton.MouseOver.Border" Color="#FF5593FF"/>
+        <SolidColorBrush x:Key="RadioButton.MouseOver.Glyph" Color="#FF212121"/>
+        <SolidColorBrush x:Key="RadioButton.Disabled.Background" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="RadioButton.Disabled.Border" Color="#FFBCBCBC"/>
+        <SolidColorBrush x:Key="RadioButton.Disabled.Glyph" Color="#FF707070"/>
+        <SolidColorBrush x:Key="RadioButton.Pressed.Background" Color="#FFD9ECFF"/>
+        <SolidColorBrush x:Key="RadioButton.Pressed.Border" Color="#FF3C77DD"/>
+        <SolidColorBrush x:Key="RadioButton.Pressed.Glyph" Color="#FF212121"/>
+        <SolidColorBrush x:Key="RadioButton.Static.Glyph" Color="#FF212121"/>
+        <Style x:Key="InstrumentRadioButton" TargetType="{x:Type RadioButton}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource RadioButton.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,3">
+                            <Rectangle x:Name="rect" Fill="Black">
+                                <Rectangle.Effect>
+                                    <DropShadowEffect Opacity="0.45" BlurRadius="2" ShadowDepth="3" Direction="300"/>
+                                </Rectangle.Effect>
+                            </Rectangle>
+                            <Border x:Name="radioContentBorder" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" Grid.Column="1">
+                                <ContentPresenter x:Name="contentPresenter"  Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                            <Rectangle x:Name="highlight"  Fill="#6f9dd8" Stroke="#b2e7f8" StrokeThickness="2" Opacity="0.2" Visibility="Collapsed"></Rectangle>
+                            <Rectangle x:Name="checked" Fill="Transparent" Stroke="{TemplateBinding Foreground}" StrokeThickness="1" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5"></Rectangle>
+                            <Rectangle x:Name="disabled" Fill="#8A8A8A" Opacity="0"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Visibility" TargetName="highlight" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="disabled" Property="Opacity" Value="0.3"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Opacity" TargetName="highlight" Value="0.4"/>
+                                <Setter Property="RenderTransform" TargetName="templateRoot">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Visibility" TargetName="checked" Value="Visible"></Setter>
+                                <Setter Property="RenderTransform" TargetName="checked">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.02" ScaleY="1.06"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Application.Resources>
+</Application>
